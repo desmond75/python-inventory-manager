@@ -61,7 +61,7 @@ class Inventory:
 		for product in self.products:
 			if product.name == old_name:
 				product.name = new_name #Set product name to the new name
-				print('Name succefully change')
+				print('Name successfully change')
 			else:
 				print('That product does not exist')
 
@@ -80,9 +80,25 @@ class Inventory:
 					print('Your demand is more than available products.Available Product {}'.format(product.quantity))
 				else:
 					product.quantity -= quantity # subtract  quatity from product quantity
-					print('product succefully taken new quantity is {}'.format(product.quantity))
+					print('product successfully taken new quantity is {}'.format(product.quantity))
 			else:				
 				print('That product does not exist')
+
+
+	def add_existing_product(self, product_name, product_quantity):
+		"""Increase the amount of existing 
+		  of a particular product in stock
+		  by searching for the product with 
+		  giving name and adding the desired 
+		  quatity to it """
+
+		for product in self.products:
+			if product.name == product_name:
+				product.quantity += product_quantity
+				print('Added successfully')
+			else:
+				print('Product [{}] does not exist.Enter [2] to add new product or [7] to view available products'.format(product_name))
+
 
 
 
@@ -101,6 +117,8 @@ class Inventory:
 		for product in self.products:
 			if product.quantity > 0:
 				new_products.append(product)
+			else:
+				print('{} is finish.'.format(product.name))
 		total_products = len(new_products) #gets the len of filtered new_products list
 		                                   # and stores it the total_products variable
 		print('''
@@ -136,12 +154,26 @@ class Menu:
 
 
 
+	def adding_existing_product(self):
+		"""Ask the user for a product name 
+		   and a product quantity to 
+		   increase the amount of the giving 
+		   product if exist in stock"""
+		try:
+			product_name = input('Enter the product name')
+			product_quantity = int(input('Enter quantity you wish to add'))
+			self.inventory.add_existing_product(product_name, product_quantity)
+
+		except Exception as e:
+			print('Enter product name and product quatity')
+
+
+
 	def check_product_quantity(self):
 
 		''' Recieves a product name and return
 		 product quantity if product is found'''
 		try:
-
 			product_name = input('enter a product name')
 			self.inventory.product_quantity(product_name)
 
@@ -155,7 +187,6 @@ class Menu:
 		'''change product name by looking for all
 		 product name and replacing it with new name'''
 		try:
-
 			old_name = input('Enter old product name')
 			new_name = input('Enter new name')
 			self.inventory.modify_product_name(old_name, new_name)
@@ -171,7 +202,6 @@ class Menu:
 		'''Deduct some products from product
 		 quantity as demanded by user'''
 		try:
-
 			product_name = input('Enter product name')
 			product_quantity = int(input('Enter product quantity'))
 			self.inventory.take_product(product_name, product_quantity)
@@ -207,7 +237,8 @@ class Menu:
 			     3 -------- Check product quantity
 			     4 -------- Change product name
 			     6 -------- Get some products
-			     7 -------- See all products                
+			     7 -------- See all products 
+			     8 -------- Increase existing product quantity                
 
 
 
@@ -234,6 +265,8 @@ class Menu:
 					self.send_out_some_products()
 				elif choice == 7:
 					self.show_all_products()
+				elif choice == 8:
+					self.adding_existing_product()
 			except Exception as e:
 				print('Please you must enter a choice')
 
